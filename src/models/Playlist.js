@@ -2,16 +2,12 @@ class playlist {
 
     id;
     name;
-    nbTrack;
     hasNext;
+    tracks;
+    nbTrack;
 
-    constructor(id) {
-        this.id = id;
+    constructor(id, name, hasNext, nbTrack, tracks) {
 
-        if (this.hasNext) {
-
-        }
     }
-
 
 }

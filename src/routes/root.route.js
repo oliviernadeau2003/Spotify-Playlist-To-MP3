@@ -1,5 +1,5 @@
 import axios, { AxiosHeaders } from 'axios';
-import express from 'express';
+import express, { response } from 'express';
 import { accessToken } from '../../tokenAccess.js';
 
 import AxiosUtils from '../utils/axios.js';
@@ -45,6 +45,10 @@ export default router;
 
 async function getAllTrack(playlistLink, config) {
     const response = await axios.get(playlistLink, config);
+
+    while (hasNext(response)) {
+
+    }
 
     //* GET PLAYLIST INFO (EVERITHINGS)
     // const response = await axios.get("https://api.spotify.com/v1/playlists/3XoVQO3vAOXJOorrfZTV0k", config);
