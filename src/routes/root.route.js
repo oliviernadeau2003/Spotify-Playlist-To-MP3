@@ -77,3 +77,7 @@ function getAllArtists(artists) { return (artists.map(artist => artist.name)).jo
 
 // https://ytmp3.nu/drb4/
 
+// https://medium.com/@Moorad/how-i-made-my-own-youtube-downloader-using-javascript-and-node-js-160b172f6e10
+
+// https://www.youtube.com/watch?v=bKnXxICFT1I
+
