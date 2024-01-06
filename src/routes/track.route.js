@@ -1,6 +1,8 @@
 import axios from 'axios';
 import express from 'express';
-import { accessToken } from '../../tokenAccess.js';
+import { accessToken } from '../../server.js';
+
+import Track from '../models/Track.js';
 
 const router = express.Router();
 
@@ -17,6 +19,12 @@ class TrackRoutes {
 
             if (!await validatePlaylist(req, res))
                 return false;
+
+
+            let newTrack = new Track("Glamorous", ["Fergie", "Ludacris"]);
+            res.status(200).json(newTrack.getSearchName());
+            return;
+
 
             // https://open.spotify.com/playlist/3XoVQO3vAOXJOorrfZTV0k?si=98496b09efba483b
             const response = await getAllTrack(`https://api.spotify.com/v1/playlists/${req.params.playlistID}/tracks`, config);

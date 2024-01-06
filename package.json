@@ -2,11 +2,11 @@
   "name": "spotify-playlist-to-titles",
   "version": "1.0.0",
   "description": "get spotify songs from a playlist",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "app": "nodemon tokenAccess.js"
+    "app": "nodemon server.js"
   },
   "author": "Olivier Nadeau",
   "license": "ISC",

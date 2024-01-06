@@ -1,4 +1,6 @@
-class playlist {
+import track from ''
+
+export default class playlist {
 
     id;
     name;

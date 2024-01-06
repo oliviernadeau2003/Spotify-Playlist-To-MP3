@@ -16,9 +16,10 @@ class YTDLRoutes {
 
             await ytdl('https://music.youtube.com/watch?v=BkSSOGNeWTM&list=RDAMVMBkSSOGNeWTM', {
                 quality: 'highest',
-                format: 'mp3',
-                filter: 'audioonly'
-            }).pipe(fs.createWriteStream('video.mp3'));
+                format: 'mp4',
+                // format: 'mp3',
+                // filter: 'audioonly'
+            }).pipe(fs.createWriteStream('video.mp4'));
 
             res.status(200).json("AWESOME");
         } catch (err) {
