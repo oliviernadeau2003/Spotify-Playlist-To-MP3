@@ -1,0 +1,47 @@
+import axios from 'axios';
+import express from 'express';
+
+import fs from 'fs';
+import ytdl from 'ytdl-core';
+import * as yt from 'youtube-search-without-api-key';
+import YTMusic from "ytmusic-api"
+
+const ytmusic = YTMusic()
+const router = express.Router();
+
+class YTDLRoutes {
+    constructor() {
+        router.get("/", this.download);
+    }
+
+    async download(req, res) {
+        try {
+
+            await ytmusic.initialize(/* Optional: Custom cookies */)
+
+            ytmusic.search(req.body.title).then(songs => {
+                console.log(songs);
+                res.status(200).json(songs);
+            })
+
+
+            // const videos = await yt.search(req.body.title);
+            // const videos = await yt.search(req.body.title);
+            // res.status(200).json(videos);
+
+            // await ytdl('https://music.youtube.com/watch?v=BkSSOGNeWTM&list=RDAMVMBkSSOGNeWTM', {
+            //     quality: 'highest',
+            //     format: 'mp4',
+            //     // format: 'mp3',
+            //     // filter: 'audioonly'
+            // }).pipe(fs.createWriteStream('video.mp4'));
+
+            // res.status(200).json(videos);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+}
+new YTDLRoutes();
+export default router;

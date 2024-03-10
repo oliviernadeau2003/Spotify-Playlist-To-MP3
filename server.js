@@ -1,5 +1,8 @@
 import chalk from "chalk";
 import axios from "axios";
+import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 
 import app from "./src/app.js";
 
@@ -22,11 +25,38 @@ axios.post('https://accounts.spotify.com/api/token', 'grant_type=client_credenti
     }
 }).then(response => {
     accessToken = response.data.access_token;
-    // Now you have the access token to make requests to the Spotify API
 
-    app.listen(PORT, (err) => {
-        if (err)
+    // Start Express server
+    const expressApp = app;
+    const server = http.createServer(expressApp);
+
+    // Create Socket.IO server
+    const io = new Server(server);
+
+    // Socket.IO connection handler
+    io.on('connection', (socket) => {
+        console.log('Socket connected');
+
+        // Periodic ping to check connection
+        const pingInterval = setInterval(() => {
+            if (socket.connected) {
+                socket.emit('ping'); // Send ping to client
+            } else {
+                clearInterval(pingInterval); // Stop pinging if connection is closed
+            }
+        }, 30000); // Send ping every 30 seconds
+
+        // Socket.IO message handler
+        socket.on('message', (message) => {
+            console.log(`Received message: ${message}`);
+        });
+    });
+
+    server.listen(PORT, (err) => {
+        if (err) {
+            console.error(chalk.red('Error starting server:'), err);
             process.exit(1);
+        }
         console.log(chalk.blue(`Server Listening On Port ${PORT}`));
     });
 

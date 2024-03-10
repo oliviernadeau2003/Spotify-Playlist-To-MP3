@@ -3,6 +3,7 @@ import express from 'express';
 import { accessToken } from '../../server.js';
 import YoutubeMusicApi from "youtube-music-api";
 
+import Track from '../models/Track.js';
 import download_song from './download_song.js';
 
 const router = express.Router();
@@ -15,24 +16,35 @@ class TrackRoutes {
     async tracks(req, res) {
         try {
             const config = {
-                headers: { Authorization: `Bearer ${accessToken}` },
-                timeout: 0 // Set timeout to 0 for no timeout
+                headers: { Authorization: `Bearer ${accessToken}` }
             };
 
             if (!await validatePlaylist(req, res))
                 return false;
 
-            // Fetch all tracks from the playlist
+
+            // let newTrack = new Track("Glamorous", ["Fergie", "Ludacris"]);
+            // res.status(200).json(newTrack.getSearchName());
+            // return;
+
+
+            // https://open.spotify.com/playlist/3XoVQO3vAOXJOorrfZTV0k?si=98496b09efba483b
             const track_list = await getAllTrack(`https://api.spotify.com/v1/playlists/${req.params.playlistID}/tracks`, config);
+            // res.status(200).json(track_list);
+
 
             try {
                 const api = new YoutubeMusicApi();
-                await api.initalize(); // Retrieves Innertube Config
+                api.initalize() // Retrieves Innertube Config
+                    .then(async _ => {
+                        track_list.tracks.forEach(async song => {
+                            await download_song(song, api);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Error initializing YouTube Music API:', error);
+                    });
 
-                // Process each track one by one
-                for (const song of track_list.tracks) {
-                    await download_song(song, api);
-                }
             } catch (err) {
                 console.error('Error:', err);
                 res.status(500).json({ error: 'Internal server error.' });
@@ -98,3 +110,14 @@ async function validatePlaylist(req, res) {
 function hasNext(playlist) { return playlist.next ? true : false }
 
 function getAllArtists(artists) { return (artists.map(artist => artist.name)).join(', ') }
+
+
+// https://ytmusicapi.readthedocs.io/en/stable/
+
+// https://ytmp3.nu/drb4/
+
+
+// https://medium.com/@Moorad/how-i-made-my-own-youtube-downloader-using-javascript-and-node-js-160b172f6e10
+
+// https://www.youtube.com/watch?v=bKnXxICFT1I
+
